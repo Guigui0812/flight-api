@@ -13,13 +13,11 @@ import java.util.List;
 @ApplicationScoped
 public class PlaneRepository implements PanacheRepositoryBase<Plane, Long> {
 
-    // Ici faire les query nécessaires pour récupérer les données de la table planes
-
-    public Plane getById(Long id) {
-        return findById(id);
+    public List<Plane> findByOperator(String operator) {
+        return find("operator", operator).stream().toList();
     }
 
-    public List<Plane> findByOperator(String operator) {
-        return find("operator", operator).list();
+    public Plane findByRegistration(String registration) {
+        return find("registration", registration).firstResultOptional().orElse(null);
     }
 }

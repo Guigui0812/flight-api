@@ -5,7 +5,6 @@ import fr.unilasalle.flight.api.repositories.PlaneRepository;
 import jakarta.inject.Inject;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -24,8 +23,6 @@ public class PlaneResources extends GenericResource {
 
     @Inject
     Validator validator;
-
-    // Pas possible de mettre deux fois le GET car pour lui c'est la même, du coup faut modifier l'URL du path
 
     @GET
     public Response getPlanes() {
@@ -57,6 +54,9 @@ public class PlaneResources extends GenericResource {
     @Transactional
     public Response createPlane(Plane plane) {
         var violations = validator.validate(plane);
+        if (!violations.isEmpty()) {
+            return Response.status(400).entity(new ErrorWrapper(violations)).build();
+        }
         try {
             planeRepository.persistAndFlush(plane);
             return Response.ok().status(201).build();

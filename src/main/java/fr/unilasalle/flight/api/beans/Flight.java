@@ -1,14 +1,19 @@
 package fr.unilasalle.flight.api.beans;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Entity
+@Table(name= "flights")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Flight extends PanacheEntity {
 
     @Id
@@ -23,13 +28,28 @@ public class Flight extends PanacheEntity {
     )
     private Long id;
 
+    @Column(name = "number", nullable = false, unique = true)
     private String number;
-    private String origin;
-    private String destination;
-    private LocalDate departureDate;
-    private LocalTime departureTime;
-    private LocalDate arrivalDate;
-    private LocalTime arrivalTime;
-    private Plane plane;
 
+    @Column(name = "origin", nullable = false)
+    private String origin;
+
+    @Column(name = "destination", nullable = false)
+    private String destination;
+
+    @Column(name = "departure_date", nullable = false)
+    private LocalDate departureDate;
+
+    @Column(name = "departure_time", nullable = false)
+    private LocalTime departureTime;
+
+    @Column(name = "arrival_date", nullable = false)
+    private LocalDate arrivalDate;
+
+    @Column(name = "arrival_time", nullable = false)
+    private LocalTime arrivalTime;
+
+    @Column(name = "plane_id")
+    @ManyToOne
+    private Plane plane;
 }

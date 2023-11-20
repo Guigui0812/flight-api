@@ -2,6 +2,8 @@ package fr.unilasalle.flight.api.beans;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,12 +26,16 @@ public class Plane extends PanacheEntity {
             generator = "planes_sequence_in_java_code"
     )
     private Long id;
+    @NotBlank(message = "The operator should not be blank")
     @Column(name = "operator")
     private String operator;
     @Column(name = "model")
     private String model;
     @Column(name = "registration")
     private String registration;
+
+    @NotNull(message = "The capacity should not be null")
+    @Size(min = 6, max = 100, message = "The capacity should be between 1 and 100")
     @Column(name = "capacity")
     private String capacity;
 }

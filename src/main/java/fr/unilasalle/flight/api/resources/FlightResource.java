@@ -31,13 +31,7 @@ public class FlightResource extends GenericResource {
     Validator validator;
 
     @GET
-    public Response getFlights() {
-        var list = flightRepository.listAll();
-        return getOr404(list);
-    }
-
-    @GET
-    public Response getFlightsByDestination(@QueryParam("destination") String destination) {
+    public Response getFlights(@QueryParam("destination") String destination) {
 
         List<Flight> flights;
 
@@ -59,21 +53,22 @@ public class FlightResource extends GenericResource {
     @POST
     @Transactional
     public Response createFlight(Flight flight) {
+
         var violations = validator.validate(flight);
         if (!violations.isEmpty()) {
             return Response.status(400).entity(new ErrorWrapper(violations)).build();
         }
 
-        Plane plane = planeRepository.getById(flight.getPlaneId());
+        Plane plane = planeRepository.getById(flight.getPlane().getId());
         if (plane == null) {
             return Response.status(400).entity(new ErrorWrapper("The plane does not exist")).build();
         }
 
         try {
             flightRepository.persist(flight);
-            return Response.ok(flight).status(201).build();
+            return Response.ok(flight).status(201).entity("Flight created").build();
         } catch (Exception e) {
-            return Response.serverError().build();
+            return Response.serverError().entity(new ErrorWrapper("Error during flight registration")).status(500).build();
         }
     }
 

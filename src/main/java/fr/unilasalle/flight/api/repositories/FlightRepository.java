@@ -14,13 +14,12 @@ import java.util.List;
 @ApplicationScoped
 public class FlightRepository implements PanacheRepositoryBase<Flight, Long> {
 
-    // Ici faire les query nécessaires pour récupérer les données de la table planes
-
     public Flight getById(Long id) {
+
         return findById(id);
     }
 
     public List<Flight> findByDestination(String destination) {
-        return find("destination", destination).list();
+        return find("destination", destination).stream().toList();
     }
 }

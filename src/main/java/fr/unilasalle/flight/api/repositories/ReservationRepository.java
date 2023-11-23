@@ -12,16 +12,11 @@ import java.util.List;
 @ApplicationScoped
 public class ReservationRepository implements PanacheRepositoryBase<Reservation, Long> {
 
-    public List<Reservation> findByFlightId(Long id) {
-        return find("flight.id", id).stream().toList();
-    }
-
     public List<Reservation> findByFlightNumber(String number) {
-        return find("flight.number", number).stream().toList();
+        return find("flight.number", number).list();
     }
 
     public Long countByFlightNumber(String number) {
         return count("flight.number", number);
     }
-
 }

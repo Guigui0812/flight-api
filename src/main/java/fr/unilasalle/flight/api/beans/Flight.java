@@ -1,5 +1,6 @@
 package fr.unilasalle.flight.api.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.validation.constraints.NotNull;
 import jakarta.enterprise.inject.Model;
@@ -11,6 +12,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Model
@@ -32,15 +35,15 @@ public class Flight extends PanacheEntityBase {
     )
     private Long id;
 
-    @NotBlank(message = "The number should not be blank")
+    @NotNull(message = "The number should not be null")
     @Column(name = "number", nullable = false, unique = true)
     private String number;
 
-    @NotBlank(message = "The origin should not be blank")
+    @NotNull(message = "The origin should be provided")
     @Column(name = "origin", nullable = false)
     private String origin;
 
-    @NotBlank(message = "The destination should not be blank")
+    @NotNull(message = "The destination should be provided")
     @Column(name = "destination", nullable = false)
     private String destination;
 
@@ -61,6 +64,11 @@ public class Flight extends PanacheEntityBase {
     private LocalTime arrivalTime;
 
     @NotNull(message = "The plane should be provided")
-    @Column(name = "planeId", nullable = false)
-    private Long planeId;
+    @ManyToOne
+    @JoinColumn(name = "planeId", referencedColumnName = "id", nullable = false)
+    private Plane plane;
+
+    @JsonIgnore
+    @OneToMany(targetEntity = Reservation.class, mappedBy = "flight")
+    private List<Reservation> reservations = new ArrayList<>();
 }

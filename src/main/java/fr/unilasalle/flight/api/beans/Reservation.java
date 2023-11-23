@@ -1,8 +1,19 @@
 package fr.unilasalle.flight.api.beans;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.enterprise.inject.Model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Entity
+@Table(name= "reservations")
+@Model
+@Getter
+@Setter
+@NoArgsConstructor
 public class Reservation extends PanacheEntityBase {
 
     @Id
@@ -17,4 +28,13 @@ public class Reservation extends PanacheEntityBase {
     )
     private Long id;
 
+    @NotNull(message = "The flight should not be null")
+    @ManyToOne
+    @JoinColumn(name = "flightId", referencedColumnName = "id", nullable = false)
+    private Flight flight;
+
+    @NotNull(message = "The passenger should not be null")
+    @ManyToOne
+    @JoinColumn(name = "passengerId", referencedColumnName = "id", nullable = false)
+    private Passenger passenger;
 }

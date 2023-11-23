@@ -25,12 +25,6 @@ public class PlaneResources extends GenericResource {
     Validator validator;
 
     @GET
-    public Response getPlanes() {
-        var list = planeRepository.listAll();
-        return getOr404(list);
-    }
-
-    @GET
     public Response getPlanesByOperator(@QueryParam("operator") String operator) {
 
         List<Plane> planes;
@@ -59,7 +53,7 @@ public class PlaneResources extends GenericResource {
         }
         try {
             planeRepository.persistAndFlush(plane);
-            return Response.ok().status(201).build();
+            return Response.ok().status(201).entity("Plane created").build();
         } catch (PersistenceException e) {
             return Response.serverError().entity(new ErrorWrapper("Error during plane registration")).status(500).build();
         }

@@ -17,14 +17,4 @@ public class Reservation extends PanacheEntityBase {
     )
     private Long id;
 
-    @Column(name = "flight_id")
-    @ManyToOne
-    @JoinColumn(name = "flight_id", referencedColumnName = "id")
-    private Flight flight;
-
-    @Column(name = "passenger_id")
-    @ManyToOne
-    @JoinColumn(name = "passenger_id", referencedColumnName = "id")
-    private Passenger passenger;
-
 }

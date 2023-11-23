@@ -49,6 +49,13 @@ public class FlightResource extends GenericResource {
         return getOr404(flights);
     }
 
+    @GET
+    @Path("/{id}")
+    public Response getFlightById(@PathParam("id") Long id) {
+        var flight = flightRepository.findByIdOptional(id);
+        return getOr404(flight);
+    }
+
     @POST
     @Transactional
     public Response createFlight(Flight flight) {
@@ -70,22 +77,21 @@ public class FlightResource extends GenericResource {
         }
     }
 
-    @GET
-    @Path("/{id}")
-    public Response getFlightById(@PathParam("id") Long id) {
-        var flight = flightRepository.findByIdOptional(id);
-        return getOr404(flight);
-    }
-
     @DELETE
     @Transactional
-    public Response deleteFlight(@QueryParam("id") Long id) {
-        var flight = flightRepository.findByIdOptional(id);
-        if (flight.isPresent()) {
-            flightRepository.delete(flight.get());
-            return Response.ok().status(204).build();
-        } else {
-            return Response.noContent().status(404).build();
+    @Path("/{id}")
+    public Response deleteFlight(@PathParam("id") Long id) {
+
+        Flight flight = flightRepository.getById(id);
+        if (flight == null) {
+            return Response.status(400).entity(new ErrorWrapper("The flight does not exist")).build();
+        }
+
+        try {
+            flightRepository.delete(flight);
+            return Response.ok().status(201).entity("The flight has been deleted").build();
+        } catch (Exception e) {
+            return Response.serverError().build();
         }
     }
 

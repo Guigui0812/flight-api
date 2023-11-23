@@ -1,10 +1,10 @@
 package fr.unilasalle.flight.api.beans;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
-public class Passenger {
+public class Passenger extends PanacheEntityBase {
 
     @Id
     @SequenceGenerator(

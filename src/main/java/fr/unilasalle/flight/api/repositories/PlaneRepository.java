@@ -20,4 +20,8 @@ public class PlaneRepository implements PanacheRepositoryBase<Plane, Long> {
     public Plane findByRegistration(String registration) {
         return find("registration", registration).firstResultOptional().orElse(null);
     }
+
+    public Plane getById(Long id) {
+        return findById(id);
+    }
 }

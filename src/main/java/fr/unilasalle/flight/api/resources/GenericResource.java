@@ -40,7 +40,5 @@ public class GenericResource {
                     .map(ConstraintViolation::getMessage)
                     .toList();
         }
-
-
     }
 }

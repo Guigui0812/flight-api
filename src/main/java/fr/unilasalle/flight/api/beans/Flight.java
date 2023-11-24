@@ -64,7 +64,7 @@ public class Flight extends PanacheEntityBase {
     private LocalTime arrivalTime;
 
     @NotNull(message = "The plane should be provided")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "planeId", referencedColumnName = "id", nullable = false)
     private Plane plane;
 

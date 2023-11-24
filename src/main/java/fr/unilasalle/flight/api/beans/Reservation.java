@@ -29,12 +29,12 @@ public class Reservation extends PanacheEntityBase {
     private Long id;
 
     @NotNull(message = "The flight should not be null")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "flightId", referencedColumnName = "id", nullable = false)
     private Flight flight;
 
     @NotNull(message = "The passenger should not be null")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "passengerId", referencedColumnName = "id", nullable = false)
     private Passenger passenger;
 }

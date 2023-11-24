@@ -16,6 +16,10 @@ public class ReservationRepository implements PanacheRepositoryBase<Reservation,
         return find("flight.number", number).list();
     }
 
+    public List<Reservation> findByFlightId(Long id) {
+        return find("flight.id", id).list();
+    }
+
     public Long countByFlightNumber(String number) {
         return count("flight.number", number);
     }

@@ -2,8 +2,10 @@ package fr.unilasalle.flight.api.resources;
 
 import fr.unilasalle.flight.api.beans.Flight;
 import fr.unilasalle.flight.api.beans.Plane;
+import fr.unilasalle.flight.api.beans.Reservation;
 import fr.unilasalle.flight.api.repositories.FlightRepository;
 import fr.unilasalle.flight.api.repositories.PlaneRepository;
+import fr.unilasalle.flight.api.repositories.ReservationRepository;
 import jakarta.inject.Inject;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
@@ -26,6 +28,9 @@ public class FlightResource extends GenericResource {
 
     @Inject
     PlaneRepository planeRepository;
+
+    @Inject
+    ReservationRepository reservationRepository;
 
     @Inject
     Validator validator;
@@ -83,6 +88,13 @@ public class FlightResource extends GenericResource {
         }
 
         try {
+
+            List<Reservation> reservations = reservationRepository.findByFlightId(id);
+
+            for (Reservation reservation : reservations) {
+                reservationRepository.delete(reservation);
+            }
+
             flightRepository.delete(flight);
             return Response.ok().status(201).entity("The flight has been deleted").build();
         } catch (Exception e) {

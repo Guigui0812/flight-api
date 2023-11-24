@@ -41,4 +41,7 @@ public class Passenger extends PanacheEntityBase {
     @NotEmpty(message = "The email should not be empty")
     @Column(name = "email_address", nullable = false)
     private String email;
+
+    // Faire les réversations (un passager peut avoir plusieurs réservations)
+
 }

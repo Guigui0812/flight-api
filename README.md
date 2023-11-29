@@ -4,6 +4,10 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
+## Swagger
+
+This API is accessible via a Swagger UI at http://localhost:8080/q/swagger-ui/#/
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:

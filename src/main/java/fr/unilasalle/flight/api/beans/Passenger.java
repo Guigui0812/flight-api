@@ -3,6 +3,7 @@ package fr.unilasalle.flight.api.beans;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.enterprise.inject.Model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class Passenger extends PanacheEntityBase {
 
     @NotEmpty(message = "The email should not be empty")
     @Column(name = "email_address", nullable = false)
+    @Email(message = "The email should be valid")
     private String email;
 
     // Faire les réversations (un passager peut avoir plusieurs réservations)

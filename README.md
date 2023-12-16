@@ -1,77 +1,53 @@
 # flight-api
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus, the Supersonic Subatomic Java Framework. If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+It has been developp during my last year of studies at ESIEE Amiens in the context of a Java EE course dispensed by Meg-Ann CAMUS.
 
-## Swagger
+## Description
 
-This API is accessible via a Swagger UI at http://localhost:8080/q/swagger-ui/#/
+This project is a REST API that allows you to manage flights and passengers. 
+
+The following operations are available :
+- Create a plane
+- Get all planes according to different criteria
+- Create a flight that is linked to a plane
+- Get flights according to different criteria
+- Reserve a seat on a flight (if there are still seats available)
+- Cancel a Flight and delete all reservations associated with it
+- Create a passenger if a reservation is made for a passenger who does not exist
+- Get passengers according to different criteria
+- Update a passenger
+- Delete a passenger
+
+It is based on a relational in-memory database (H2) and uses Hibernate ORM to manage the persistence of the data.
+
+The framework used to the HTTP part is RESTEasy. 
+
+### Swagger
+
+This API is accessible via a Swagger UI at http://localhost:8080/q/swagger-ui/#/ when the project is running.
+
+On this page you can test the different endpoints of the API. 
+
+### Tests
+
+This project contains unit tests and integration tests. 
+
+To run the tests : 
+```shell script
+mvn test
+```
+
+### Database
+
+If you want to manage the database, you can access the H2 console at http://localhost:8080/h2 when the project is running.
+
+They've been written with RestAssured and allow to test the different endpoints of the API according to different scenarios.
 
 ## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+This app can be run in dev mode : 
 ```shell script
-./mvnw compile quarkus:dev
+mvn quarkus:dev
 ```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/flight-api-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and Jakarta Persistence
-- JDBC Driver - H2 ([guide](https://quarkus.io/guides/datasource)): Connect to the H2 database via JDBC
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and method parameters for your beans (REST, CDI, Jakarta Persistence)
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- RESTEasy Classic ([guide](https://quarkus.io/guides/resteasy)): REST endpoint framework implementing Jakarta REST and more
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### RESTEasy JAX-RS
-
-Easily start your RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)

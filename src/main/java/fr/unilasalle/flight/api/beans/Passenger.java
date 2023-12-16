@@ -5,6 +5,7 @@ import jakarta.enterprise.inject.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,15 +30,15 @@ public class Passenger extends PanacheEntityBase {
     )
     private Long id;
 
-    @NotEmpty(message = "The firstname should not be empty")
+    @NotNull(message = "The firstname should not be null")
     @Column(name = "firstname", nullable = false)
     private String firstName;
 
-    @NotEmpty(message = "The surname should not be empty")
+    @NotNull(message = "The surname should not be null")
     @Column(name = "surname", nullable = false)
     private String surname;
 
-    @NotEmpty(message = "The email should not be empty")
+    @NotNull(message = "The email should not be null")
     @Column(name = "email_address", nullable = false, unique = true)
     @Email(message = "The email should be valid", regexp = "^[A-Za-z0-9+_.-]+@.+\\..+$")
     private String email;

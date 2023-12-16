@@ -27,14 +27,16 @@ public class Plane extends PanacheEntityBase {
     )
     private Long id;
 
-    @NotBlank(message = "The operator should not be blank")
+    @NotNull(message = "The operator should not be null")
     @Column(name = "operator", nullable = false)
     private String operator;
 
     @Column(name = "model", nullable = false)
+    @NotNull(message = "The model should not be null")
     private String model;
 
     @Column(name = "registration", nullable = false, unique = true)
+    @NotNull(message = "The registration should not be null")
     private String registration;
 
     @NotNull(message = "The capacity should not be null")

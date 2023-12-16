@@ -32,7 +32,7 @@ On this page you can test the different endpoints of the API.
 
 ### Tests
 
-This project contains unit tests and integration tests. 
+This project contains unit tests to ensure the proper functioning of the different services.
 
 To run the tests : 
 ```shell script

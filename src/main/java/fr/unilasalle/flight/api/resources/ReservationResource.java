@@ -39,6 +39,8 @@ public class ReservationResource extends GenericResource {
 
         List<Reservation> reservations;
 
+        // Si le numéro de vol est renseigné en QueryParam, on récupère les réservations correspondantes
+        // Sinon, on récupère toutes les réservations
         if (StringUtils.isNotBlank(flightNumber))
             reservations = reservationRepository.findByFlightNumber(flightNumber);
         else
@@ -47,40 +49,45 @@ public class ReservationResource extends GenericResource {
         return getOr404(reservations);
     }
 
-    // Penser à baisser la capacité de l'avion si une place est réservée
     @POST
     @Transactional
     public Response createReservation(Reservation reservation) {
         var violations = validator.validate(reservation);
 
+        // Si des violations sont détectées, on renvoie une erreur 400 avec les violations
         if (!violations.isEmpty()) {
             return Response.status(400).entity(new ErrorWrapper(violations)).build();
         }
 
-        if (reservationRepository.countByFlightNumber(reservation.getFlight().getNumber()) >= reservation.getFlight().getPlane().getCapacity()){
+        // Vérifie que le vol existe
+        Flight flight = flightRepository.findById(reservation.getFlight().getId());
+
+        if (flight == null) {
+            return Response.status(404).entity(new ErrorWrapper("Provided Flight does not exist")).build();
+        }
+
+        reservation.setFlight(flight);
+
+        // Vérifie que le nombre de réservations n'a pas atteint la capacité de l'avion
+        if (reservationRepository.countByFlightNumber(flight.getNumber()) >= flight.getPlane().getCapacity()) {
             return Response.status(400).entity(new ErrorWrapper("The plane is full")).build();
         }
 
-        Flight flight;
-        if (StringUtils.isNotBlank(reservation.getFlight().getNumber())) {
-            flight = flightRepository.findById(reservation.getFlight().getId());
-            if (flight == null) {
-                return Response.status(400).entity(new ErrorWrapper("Provided Flight does not exist")).build();
-            }
-            reservation.setFlight(flight);
-        }
-
+        // Vérifie que le passager existe, sinon le crée
         Passenger passenger;
         List<Passenger> existingPassengers = passengerRepository.findByEmail(reservation.getPassenger().getEmail());
         if (existingPassengers.isEmpty()) {
             passenger = reservation.getPassenger();
-            passenger.setId(null);
-            passengerRepository.persist(passenger);
+            passenger.setId(null); // Forcer l'ID à null afin de le générer automatiquement
+            passengerRepository.persist(passenger); // Création du passager en base de données
         } else {
-            passenger = existingPassengers.get(0); // Utilisez le passager existant
+            passenger = existingPassengers.get(0); // Utilise le passager existant
         }
 
+        // Ajoute le passager à la réservation avec le bon ID
         reservation.setPassenger(passenger);
+
+        // Enregistre la réservation en base de données
         reservationRepository.persist(reservation);
 
         try {
@@ -91,7 +98,6 @@ public class ReservationResource extends GenericResource {
         }
     }
 
-    // Penser à mettre à jour la capacité de l'avion si une place se libère
     @DELETE
     @Path("/{id}")
     public Response deleteReservation(@PathParam("id") Long id) {

@@ -14,7 +14,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.h2.table.Plan;
 
 import java.util.List;
 
@@ -40,6 +39,8 @@ public class FlightResource extends GenericResource {
 
         List<Flight> flights;
 
+        // Si la destination est renseignée en QueryParam, on récupère les vols correspondants
+        // Sinon, on récupère tous les vols
         if (StringUtils.isNotBlank(destination))
             flights = flightRepository.findByDestination(destination);
         else
@@ -51,6 +52,7 @@ public class FlightResource extends GenericResource {
     @GET
     @Path("/{id}")
     public Response getFlightById(@PathParam("id") Long id) {
+        // Récupère le vol par son id si spécifié en PathParam
         var flight = flightRepository.findByIdOptional(id);
         return getOr404(flight);
     }
@@ -59,16 +61,19 @@ public class FlightResource extends GenericResource {
     @Transactional
     public Response createFlight(Flight flight) {
 
+        // Vérifie que le vol est valide (contraintes de l'entité respectées)
         var violations = validator.validate(flight);
         if (!violations.isEmpty()) {
             return Response.status(400).entity(new ErrorWrapper(violations)).build();
         }
 
+        // Vérifie que l'avion utilisé pour le vol existe
         Plane plane = planeRepository.getById(flight.getPlane().getId());
         if (plane == null) {
-            return Response.status(400).entity(new ErrorWrapper("The plane does not exist")).build();
+            return Response.status(404).entity(new ErrorWrapper("The plane does not exist")).build();
         }
 
+        // Création du vol
         try {
             flightRepository.persist(flight);
             return Response.ok(flight).status(201).entity("Flight created").build();
@@ -82,27 +87,27 @@ public class FlightResource extends GenericResource {
     @Path("/{id}")
     public Response deleteFlight(@PathParam("id") Long id) {
 
+        // Récupère le vol et vérifie qu'il existe, sinon retourne une erreur 404
         Flight flight = flightRepository.getById(id);
         if (flight == null) {
-            return Response.status(400).entity(new ErrorWrapper("The flight does not exist")).build();
+            return Response.status(404).entity(new ErrorWrapper("The flight does not exist")).build();
         }
 
         try {
 
+            // Récupère les réservations associées au vol et les supprime
             List<Reservation> reservations = reservationRepository.findByFlightId(id);
 
+            // Boucle sur les réservations et les supprime
             for (Reservation reservation : reservations) {
                 reservationRepository.delete(reservation);
             }
 
+            // Supprime le vol une fois que toutes les réservations ont été supprimées
             flightRepository.delete(flight);
-            return Response.ok().status(201).entity("The flight has been deleted").build();
+            return Response.ok().status(201).entity("The flight has been deleted with all its reservations").build();
         } catch (Exception e) {
-            return Response.serverError().build();
+            return Response.serverError().entity(new ErrorWrapper("Error during flight deletion")).status(500).build();
         }
     }
-
 }
-
-
-

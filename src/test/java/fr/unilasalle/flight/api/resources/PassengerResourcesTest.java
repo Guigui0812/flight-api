@@ -45,4 +45,19 @@ public class PassengerResourcesTest {
                 .body(equalTo("Passenger updated"));
     }
 
+    // Check an incorrect email address
+    @Test
+    public void CreatePassengerIncorrectEmailAddress() {
+        given()
+                .when()
+                .body("{\n" +
+                        "    \"firstName\": \"Ines\",\n" +
+                        "    \"surname\": \"ROHEE\",\n" +
+                        "    \"email\": \"ines.delmerle\"\n" +
+                        "}")
+                .contentType("application/json")
+                .post("/passengers")
+                .then()
+                .statusCode(405);
+    }
 }

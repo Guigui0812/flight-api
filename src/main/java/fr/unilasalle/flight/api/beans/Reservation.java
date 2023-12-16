@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name= "reservations")
-@Model
 @Getter
 @Setter
 @NoArgsConstructor

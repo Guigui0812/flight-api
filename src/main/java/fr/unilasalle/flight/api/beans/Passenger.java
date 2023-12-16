@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Model
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "passengers")
@@ -40,10 +38,7 @@ public class Passenger extends PanacheEntityBase {
     private String surname;
 
     @NotEmpty(message = "The email should not be empty")
-    @Column(name = "email_address", nullable = false)
-    @Email(message = "The email should be valid")
+    @Column(name = "email_address", nullable = false, unique = true)
+    @Email(message = "The email should be valid", regexp = "^[A-Za-z0-9+_.-]+@.+\\..+$")
     private String email;
-
-    // Faire les réversations (un passager peut avoir plusieurs réservations)
-
 }

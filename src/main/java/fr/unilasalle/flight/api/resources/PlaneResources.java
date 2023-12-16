@@ -29,6 +29,8 @@ public class PlaneResources extends GenericResource {
 
         List<Plane> planes;
 
+        // Si l'opérateur est renseigné en QueryParam, on récupère les avions correspondants
+        // Sinon, on récupère tous les avions
         if (StringUtils.isNotBlank(operator))
             planes = planeRepository.findByOperator(operator);
         else
@@ -40,6 +42,7 @@ public class PlaneResources extends GenericResource {
     @GET
     @Path("/{id}")
     public Response getPlaneById(@PathParam("id") Long id) {
+        // Récupère l'avion par son id si spécifié en PathParam
         var plane = planeRepository.findByIdOptional(id);
         return getOr404(plane);
     }
@@ -48,10 +51,13 @@ public class PlaneResources extends GenericResource {
     @Transactional
     public Response createPlane(Plane plane) {
         var violations = validator.validate(plane);
+
+        // Si des violations sont détectées, on renvoie une erreur 400 avec les violations
         if (!violations.isEmpty()) {
             return Response.status(400).entity(new ErrorWrapper(violations)).build();
         }
         try {
+            // Sinon, on persiste l'avion en base de données
             planeRepository.persistAndFlush(plane);
             return Response.ok().status(201).entity("Plane created").build();
         } catch (PersistenceException e) {

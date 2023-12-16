@@ -21,11 +21,12 @@ public class PassengerRepository implements PanacheRepositoryBase<Passenger, Lon
 
     public void update(Passenger outdatedPassenger, Passenger updatedPassenger){
 
+        // La méthode récurpère les données de l'objet passé en paramètre et les met à jour avec les données de l'objet passé en second paramètre
+
         outdatedPassenger.setSurname(updatedPassenger.getSurname());
         outdatedPassenger.setFirstName(updatedPassenger.getFirstName());
         outdatedPassenger.setEmail(updatedPassenger.getEmail());
 
         outdatedPassenger.persist();
     }
-
 }

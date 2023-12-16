@@ -70,7 +70,7 @@ public class FlightResourceTest {
     @Test
     public void deleteFlight() {
         given()
-                .when().delete("/flights/1")
+                .when().delete("/flights/2")
                 .then()
                 .statusCode(201);
     }

@@ -15,7 +15,6 @@ import java.util.List;
 public class FlightRepository implements PanacheRepositoryBase<Flight, Long> {
 
     public Flight getById(Long id) {
-
         return findById(id);
     }
 

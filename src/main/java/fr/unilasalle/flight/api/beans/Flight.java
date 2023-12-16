@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Model
 @Table(name= "flights")
 @Getter
 @Setter
@@ -35,7 +34,7 @@ public class Flight extends PanacheEntityBase {
     )
     private Long id;
 
-    @NotNull(message = "The number should not be null")
+    @NotNull(message = "The number should be provided")
     @Column(name = "number", nullable = false, unique = true)
     private String number;
 

@@ -43,6 +43,13 @@ mvn test
 
 If you want to manage the database, you can access the H2 console at http://localhost:8080/h2 when the project is running.
 
+To access the database, you must enter the following information: 
+- JDBC URL: jdbc:h2:mem:flight-api
+- User Name: Quarkus
+- Password: Quarkus
+
+Please, note that the database is in-memory. So, if you stop the application, the data will be lost.
+
 They've been written with RestAssured and allow to test the different endpoints of the API according to different scenarios.
 
 ## Running the application in dev mode
